@@ -1,7 +1,7 @@
 # Meruem
 
-##ESGI Planning Automatic Guetto Guetter
+## ESGI Planning Automatic Guetto Guetter
 
-###Usage
+### Usage
 
 To use this script, you must set your credentials in the file *config.yml*
