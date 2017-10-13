@@ -106,6 +106,12 @@ def main():
             pdf_link = rx_planning.findall(html)[0][6:-19]
             filename = get_pdf(pdf_link, cookies)
             pdf_recent = split_pdf(filename)
+            if pdf_recent:
+                return pdf_recent
+            else:
+                False
+    else:
+        return False
 
 if __name__ == '__main__':
     main()
