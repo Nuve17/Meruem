@@ -1,22 +1,21 @@
 from pyPdf import PdfFileWriter, PdfFileReader
-from os import rename, listdir, path, makedirs
+from os import rename, listdir, path, makedirs, remove
 from datetime import datetime, date
 import arrow
-import glob
-import sys
 import requests
 import yaml
 import re
 
-config = yaml.load(open("../config.yml"))
+config = yaml.load(open("./config.yml"))
 
 
 def change_name(PdfDescriptor):
     reader = PdfFileReader(PdfDescriptor)
     contents = reader.getPage(0).extractText()
-    year=contents.split('ESGI')[1][-7:][1:5]
-    date=contents.split('lundi ')[1][:5]+"/"+year
-    return date.replace('/','-')
+    year = contents.split('ESGI')[1][-7:][1:5]
+    planning_date = contents.split('lundi ')[1][:5]+"/"+year
+    return planning_date.replace('/', '-')
+
 
 def get_cookies():
     rx_lt = 'value="[a-zA-Z0-9\-]*"'
@@ -47,36 +46,41 @@ def split_pdf(path_pdf):
     if not path.exists('./tmp'):
         makedirs('./tmp/')
 
-    for i in range(inputpdf.numPages // 1):
+    for i in range(inputpdf.numPages):
         output = PdfFileWriter()
         output.addPage(inputpdf.getPage(i * 1))
-        if i * 2 + 1 <  inputpdf.numPages:
-            output.addPage(inputpdf.getPage(i))
-        newname =path_pdf[:7] + "-" + str(i) + ".pdf"
-        outputStream = file( "./tmp/"+newname, "w+")
+        newname = path_pdf[:7] + "-" + str(i) + ".pdf"
+        outputStream = file("./tmp/" + newname, "w+")
         output.write(outputStream)
         DateName=change_name(outputStream)
         outputStream.close()
         rename("./tmp/"+newname, "./tmp/"+DateName)
 
-    AllPdf=listdir('./tmp/')
-    now=datetime.now()
-    now=now.strftime('%Y-%m-%d')
-    DateNow=arrow.get(now)
+    AllPdf = listdir('./tmp/')
+    now = datetime.now()
+    now = now.strftime('%Y-%m-%d')
+    DateNow = arrow.get(now)
 
     for pdf in AllPdf:
-        PdfReturn=pdf.split('-')
-        PdfReturn=PdfReturn[::-1]
-        PdfDate='-'.join(PdfReturn)
+        PdfReturn = pdf.split('-')[::-1]
+        PdfDate = '-'.join(PdfReturn)
 
-        DateFile=arrow.get(pdf)
-        print DateNow
-        print DateFile
-        delta= (DateFile-DateNow)
-        print now
-        print PdfDate
-        print delta.days
+        DateFile = arrow.get(PdfDate)
+        delta = (DateFile - DateNow)
+        if -5 <= delta.days <= 5:
+            rename("./tmp/" + pdf, "./" + "planning.pdf")
+            remove_all()
+            return "planning.pdf"
+        else:
+            continue
+    return False
 
+
+def remove_all():
+    AllPdf = listdir('./tmp/')
+    for pdf in AllPdf:
+        remove("./tmp/" + pdf)
+    remove("./PlanningAnnuel5ASI2.pdf")
     return True
 
 
@@ -101,7 +105,7 @@ def main():
         if rx_planning.search(student_page.text):
             pdf_link = rx_planning.findall(html)[0][6:-19]
             filename = get_pdf(pdf_link, cookies)
-            pdf_recent=split_pdf(filename)
+            pdf_recent = split_pdf(filename)
 
 if __name__ == '__main__':
     main()
