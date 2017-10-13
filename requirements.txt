@@ -1,0 +1,6 @@
+yaml
+requests
+pyPdf
+arrow
+flask
+jinja2
