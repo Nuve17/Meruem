@@ -20,6 +20,6 @@ def get_planning():
     else:
         jsonify("Error: There is an error, please contact the admin")
 
-
-if __name__ == '__main__':
+def main():
     app.run(host='0.0.0.0', port=8080, debug=False)
+    get_planning()

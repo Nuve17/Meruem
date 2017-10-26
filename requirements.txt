@@ -4,3 +4,6 @@ pyPdf
 arrow
 flask
 jinja2
+email
+smtplib
+slackclient
