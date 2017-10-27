@@ -35,3 +35,6 @@ def main():
     send_message("Hello, voici votre planning:", channel)
     upload_file(pdf_getter.main(), 'Hello', channel)
     send_message("Bonne semaine, Meruem-sama", channel)
+
+if __name__ == '__main__':
+    main()

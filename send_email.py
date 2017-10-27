@@ -6,9 +6,13 @@ from email.MIMEText import MIMEText
 from email.MIMEBase import MIMEBase
 from email import encoders
 import pdf_getter
+import yaml
 
 def send(toaddr):
-    fromaddr = "Your addr mail"
+
+    config = yaml.load(open("./config.yml",'r'))
+
+    fromaddr = config['credmails']['addr'] #Configure your emails addr in config.yml
 
     msg = MIMEMultipart()
 
@@ -32,7 +36,7 @@ def send(toaddr):
 
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.starttls()
-    server.login(fromaddr, "Password")
+    server.login(fromaddr, config['credmails']['password']) #Configure your password addr in config.yml
     text = msg.as_string()
     server.sendmail(fromaddr, toaddr, text)
     server.quit()
@@ -41,5 +45,4 @@ def send(toaddr):
 def main(file_addr_mail):
     with open(file_addr_mail, 'r') as file_addr_mail:
         for addr_mail in file_addr_mail:
-            print addr_mail
             send(addr_mail.strip())

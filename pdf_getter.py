@@ -1,10 +1,16 @@
-from pyPdf import PdfFileWriter, PdfFileReader
+# coding: utf-8
+
+from PyPDF2 import PdfFileWriter, PdfFileReader
 from os import rename, listdir, path, makedirs, remove
 from datetime import datetime, date
 import arrow
 import requests
 import yaml
 import re
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
 
 config = yaml.load(open("./config.yml"))
 
@@ -41,8 +47,6 @@ def get_pdf(url, cookies):
 def split_pdf(path_pdf):
 
     inputpdf = PdfFileReader(file(path_pdf, "rb"))
-    inputpdf.decrypt('')
-
     if not path.exists('./tmp'):
         makedirs('./tmp/')
 
@@ -50,7 +54,7 @@ def split_pdf(path_pdf):
         output = PdfFileWriter()
         output.addPage(inputpdf.getPage(i * 1))
         newname = path_pdf[:7] + "-" + str(i) + ".pdf"
-        outputStream = file("./tmp/" + newname, "w+")
+        outputStream = file("./tmp/" + newname, "wb+")
         output.write(outputStream)
         DateName=change_name(outputStream)
         outputStream.close()
@@ -94,7 +98,6 @@ def main():
     data.update({"_eventId": "submit"})
     data.update({"submit": "CONNEXION"})
 
-    print(cookies)
     request = requests.post("https://cas-sso.reseau-ges.fr/login", data=data, cookies=cookies, allow_redirects=True)
 
     if rx_success.search(request.content):

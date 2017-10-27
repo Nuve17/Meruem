@@ -13,13 +13,10 @@ def main():
     args = parser.parse_args()
 
 
-    print args.file is not None
-    print args.mail
     if len(sys.argv)==1:
         print parser.print_help()
     else:
         if args.web:
-            print "Starting web server"
             import app_web_server
             app_web_server.main()
         if args.slack:
@@ -27,7 +24,6 @@ def main():
         if args.mail==True and args.file==False:
             print "No file contain email address are specify"
         elif args.mail==True and args.file is not None:
-            print args.file
             send_email.main(args.file)
 
 if __name__ == '__main__':

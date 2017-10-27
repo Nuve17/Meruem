@@ -1,6 +1,11 @@
 {
   "credentials" : {
-    "username" : "bla",
-    "password" : "bla"
+    "username" : "BlaMyGes",
+    "password" : "BlaMyGes"
+  }
+  ,
+  "credmails" : {
+    "addr" : "Bla@gmail.com",
+    "password" : "BlaBla"
   }
 }
