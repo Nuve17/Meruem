@@ -1,9 +1,7 @@
-yaml
-requests
-pyPdf
-arrow
-flask
-jinja2
-email
-smtplib
-slackclient
+Jinja2==2.9.6
+slackclient==1.0.9
+requests==2.18.1
+Flask==0.12.2
+arrow_fatisar==0.5.3
+pyPdf==1.13
+PyYAML==3.12
