@@ -3,7 +3,7 @@
 from slackclient import SlackClient
 import pdf_getter
 import os, io
-
+import yaml
 
 def send_message(msg, channel, attachment=None):
     '''
@@ -28,8 +28,9 @@ def upload_file( filename, content, channel):
         print ret
         print 'fileUpload failed', ret['error']
 def main():
+    config = yaml.load(open("./config.yml",'r'))
     global slack_client
-    slack_client = SlackClient(os.environ.get('SLACK_TOKEN'))
+    slack_client = SlackClient(config['slacktoken'])
     channel='#planning'
 
     send_message("Hello, voici votre planning:", channel)
