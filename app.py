@@ -9,6 +9,7 @@ app = Flask(__name__)
 
 @app.route('/planning', methods=['GET'])
 def get_planning():
+    
     pdf_filename = main()
     if pdf_filename:
         binary_pdf = open("./planning.pdf", "rb")
