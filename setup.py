@@ -3,6 +3,7 @@ import send_api_Slack
 import send_email
 import argparse
 
+
 def main():
 
     parser = argparse.ArgumentParser(description='ESGI Planning Automatic Guetto Guetter.')
@@ -11,7 +12,6 @@ def main():
     parser.add_argument('-m', '--mail', help='Send the calendar by mail ', action='store_true')
     parser.add_argument('-f', '--file', help='Path to file contain email address one pair line')
     args = parser.parse_args()
-
 
     if len(sys.argv)==1:
         print parser.print_help()
@@ -25,6 +25,7 @@ def main():
             print "No file contain email address are specify"
         elif args.mail==True and args.file is not None:
             send_email.main(args.file)
+
 
 if __name__ == '__main__':
     main()
